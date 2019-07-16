@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd http://www.mulesoft.org/schema/mule/munit-tools http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd ">
+    <munit:config name="temperatureapi_unit_test.xml" />
+	<http:request-config name="HTTP_TempAPI_Request_Configuration" doc:name="HTTP Request configuration" doc:id="5c6770ef-00ac-45e1-88a4-6b57578d967a" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<munit:test name="get:\:temperatureapi-config-200-application\unit-test" description="Verifying functionality of [get:\:temperatureapi-config-200-application\json]">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="temperatureapi-main" />
+            <munit:enable-flow-source value="get:\:temperatureapi-config" />
+        </munit:enable-flow-sources>
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock When - Request to OpenWeatherAPI - 200" doc:id="74df988a-02ef-40a5-a51f-8454f99776f5" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue='Request-OpenWeatherAPI' />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[{"main":{"temp":288.32},"sys":{"country":"AU"},"name":"Brisbane","cod":200}]'/>
+					<munit-tools:attributes value="#[{statusCode : 200}]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<http:request method="GET" doc:name="RequestFor200" doc:id="847087ca-f46b-4d00-8923-6fe07a31fc4b" config-ref="HTTP_TempAPI_Request_Configuration" path="/api" >
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : "Value",
+	"client_secret" : "Value"
+}]]]></http:headers>
+				<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"city" : "Brisbane,AU"
+}]]]></http:query-params>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <logger level="DEBUG" doc:name="Logger" doc:id="f4a00bd6-81a0-49ef-9802-f37af8ddb99f" message="attributes.statusCode"/>
+			<munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(200)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 200" />
+        </munit:validation>
+    </munit:test>
+    <munit:test name="get:\:temperatureapi-config-404-application\unit-test" description="Verifying functionality of [get:\:temperatureapi-config-404-application\json]" expectedErrorType="HTTP:NOT_FOUND">
+        <munit:enable-flow-sources>
+            <munit:enable-flow-source value="temperatureapi-main" />
+            <munit:enable-flow-source value="get:\:temperatureapi-config" />
+        </munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock When - Request to OpenWeatherAPI - 404" doc:id="e6d8fb0b-619d-4f39-a65f-9d60b91a2c90" processor="http:request" >
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="Request-OpenWeatherAPI" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[{"main":{"temp":288.32},"sys":{"country":"AU"},"name":"Brisbane","cod":200}]' mediaType="application/jason" />
+					<munit-tools:error typeId="HTTP:NOT_FOUND"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<http:request method="GET" doc:name="RequestFor404" doc:id="e6635b1d-10bd-4fce-9156-3a44af68738b" config-ref="HTTP_TempAPI_Request_Configuration" path="/api" >
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_id" : "Value",
+	"client_secret" : "Value"
+}]]]></http:headers>
+				<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"city" : "Brisbanee,AU"
+}]]]></http:query-params>
+			</http:request>
+        </munit:execution>
+		<munit:validation>
+            <logger level="DEBUG" doc:name="Logger" doc:id="dc5f66a9-2681-4c5b-8396-4dc26e70a2a8" message="#[attributes.statusCode]"/>
+			<munit-tools:assert-that expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(404)]" message="The HTTP Status code is not correct!" doc:name="Assert That Status Code is 404" />
+        </munit:validation>
+    </munit:test>
+</mule>

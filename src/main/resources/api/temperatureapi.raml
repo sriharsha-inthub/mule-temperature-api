@@ -1,0 +1,50 @@
+#%RAML 1.0
+version: v1
+title: TemperatureAPI
+baseUri: http://temperature-ws.cloudhub.io/api/
+description: "API to get temperature of world popular cities  in Celsius unit"
+documentation:
+  - title: Home
+    content: TemperatureAPI allows you to get temperature of world popular cities in Celsius unit for the provided city, the city value needs to include comma separated  country code (ex - Brisbane,AU). Get the client access to use this API by raising the request in this portal.  
+  
+traits:
+  client-id-required:
+    headers:
+      client_id:
+        type: string
+      client_secret:
+        type: string
+
+types:
+  City: string
+  pattern:
+
+/:
+  is: [client-id-required]
+  get:
+    description: "Retrieves the Given City's Temporature in Celsius unit"
+    queryParameters:
+      city:
+        description: "City Name with comma separted 2 letter Country code"
+        required: true
+        type: City
+        pattern: '[a-zA-Z]+,[a-zA-Z][a-zA-Z]'
+        example:
+          "Brisbane,AU"
+    responses:
+      200:
+        description: O.K
+        body:
+          application/json:
+            examples:
+              {
+                "city": "Brisbane",
+                "country": AU,
+                "temperature": 30
+              }
+      404:
+        description: "City not found"
+        body:
+          application/json:
+            examples: { "cod": "404", "message":"city not found"}
+            
