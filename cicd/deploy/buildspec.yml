@@ -1,0 +1,30 @@
+version: 0.2
+
+env:
+  variables:
+    JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
+  parameter-store:
+    CLOUDHUB_PASSWORD: /CodeBuild/pass
+    CLOUDHUB_USERNAME: /CodeBuild/user
+    
+phases:
+  install:
+    runtime-versions:
+      java: openjdk8
+  pre_build:
+    commands:
+      - echo "Build [pre_build] phase started..."
+      - echo "Nothing"
+      - echo "Build [pre_build] phase completed...`date`"
+  build:
+    commands:
+      - echo "Build [build] phase started...`date`"
+      - echo "Mule app - temperature-api - Deploying started...`date`"
+      - mvn deploy -DmuleDeploy  -Dmule.RuntimeVersion=4.1.5 -Danypoint.env=UAT -Dcloudhub.appName=temperature-api-11 -Dcloudhub.username=CLOUDHUB_USERNAME -Dcloudhub.password=CLOUDHUB_PASSWORD
+      - echo "Mule app - temperature-api - Deploying completed...`date`"
+      - echo "Build [build] phase completed...`date`"
+  post_build:
+    commands:
+      - echo "Build [post_build] phase started...`date`"
+      - echo "Nothing"
+      - echo "Build [post_build] phase completed...`date`"
