@@ -45,7 +45,7 @@ phases:
       - echo "End of post-build phase."  
 artifacts:
   files:
-    - target/temperature-api-1.0.0-mule-application.jar
+    - target/temperatureapi-1.0.0-mule-application.jar
   discard-paths: yes
 
 cache:
