@@ -3,7 +3,7 @@ version: 0.2
 env:
   variables:
     EFS_DIR: "/efs"
-    M2_HOME: ".m2"
+    MAVEN_HOME: ".m2"
     EFS_DNS: "fs-d6bef1ef.efs"
     EFS_DNS_FULL: "fs-d6bef1ef.efs.ap-southeast-2.amazonaws.com"
     EFS_IP_ZONE_2A: "10.0.0.11"
@@ -31,13 +31,13 @@ phases:
     commands:
       - echo "Mounting efs with ntfs v4.1"
       - df -h
-      - echo "mount -t $EFS_DIR $EFS_DNS:/ $EFS_DIR"
+      - mount -t efs $EFS_DNS:/ $EFS_DIR
       - echo "****************************************************************************************************************"
       - mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev $EFS_DNS_FULL:/ $EFS_DIR
       - echo "mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport $EFS_IP_ZONE_2A:/ $EFS_DIR"
       - echo "mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport $EFS_IP_ZONE_2A:/ $EFS_DIR"
       - df -h
-      - mkdir -p $EFS_DIR/$M2_HOME/
+      - mkdir -p $EFS_DIR/$MAVEN_HOME/
       - echo " ================================= "
       - echo "Mule app - temperature-api - Build Initiated... "
       - echo "Build [pre_build] phase started..."
@@ -50,7 +50,7 @@ phases:
     run-as: root
     commands:
       - echo "Build [build] phase started..."
-      - mvn clean install -DskipTests -Dgpg.skip=true -Dmaven.repo.local=$EFS_DIR/$M2_HOME/
+      - mvn clean install -DskipTests -Dgpg.skip=true -Dmaven.repo.local=$EFS_DIR/$MAVEN_HOME/
       - echo "Build [build] phase completed..."
     finally:
       - echo "End of build phase."
@@ -59,7 +59,7 @@ phases:
     commands:
       - echo "Build [post_build] phase started..."
       - echo "Deploying to CLoudHub with credentials stored in parameter store"
-      - mvn deploy -DmuleDeploy -DskipTests -Dmule.version=$MULE_VERSION -Danypoint.environment=$CLOUDHUB_ENV -Danypoint.username=$CLOUDHUB_USERNAME -Dcloudhub.password=$CLOUDHUB_PASSWORD -Dcloudhub.application.name=$APP_NAME -Dgpg.skip=true -Dmaven.repo.local=$EFS_DIR/$M2_HOME/
+      - mvn deploy -DmuleDeploy -DskipTests -Dmule.version=$MULE_VERSION -Danypoint.environment=$CLOUDHUB_ENV -Danypoint.username=$CLOUDHUB_USERNAME -Dcloudhub.password=$CLOUDHUB_PASSWORD -Dcloudhub.application.name=$APP_NAME -Dgpg.skip=true -Dmaven.repo.local=$EFS_DIR/$MAVEN_HOME/
       - echo "Build [post_build] phase completed..."
     finally:
       - echo "End of post-build phase."  
