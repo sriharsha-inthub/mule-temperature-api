@@ -31,7 +31,7 @@ phases:
     commands:
       - echo "Mounting efs with ntfs v4.1"
       - df -h
-      - mount -t efs $EFS_DNS:/ $EFS_DIR
+      - echo "mount -t efs $EFS_DNS:/ $EFS_DIR"
       - echo "****************************************************************************************************************"
       - echo "mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev $EFS_DNS_FULL:/ $EFS_DIR"
       - mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport,_netdev $EFS_DNS_FULL:/ $EFS_DIR
