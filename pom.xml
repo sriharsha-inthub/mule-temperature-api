@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>7c1661cd-9a75-4a57-8958-555c98995e62</groupId>
+	<groupId>com.au.inthub</groupId>
 	<artifactId>temperatureapi</artifactId>
     <version>1.0.0</version>
     <packaging>mule-application</packaging>
@@ -13,9 +13,22 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<app.runtime>4.1.4</app.runtime>
-		<mule.version>4.1.4</mule.version>
+		<mule.version>4.1.5</mule.version>
 		<mule.maven.plugin.version>3.3.0</mule.maven.plugin.version>
 		<munit.version>2.1.4</munit.version>
+		
+		<!-- anypoint.uri>https://anypoint.mulesoft.com</anypoint.uri -->
+		<!-- cloudhub.accessToken>${env.ACCESS_TOKEN}</cloudhub.accessToken -->
+		<!-- cloudhub.region> The default value is us-east-1/us-east2,(N. Virginia/Ohio)</cloudhub.region -->
+		<!-- anypoint.environment>Sandbox</anypoint.environment -->
+		<!-- cloudhub.businessGroupName>test</cloudhub.businessGroupName -->
+		<!-- cloudhub.username>dummyUser</cloudhub.username -->
+		<!--cloudhub.password>dummySecret</cloudhub.password -->
+		<!-- cloudhub.deploymentTimeout>1000000</cloudhub.deploymentTimeout --> <!-- 1000 seconds-->
+		<cloudhub.application.name>${project.name}</cloudhub.application.name>
+		<cloudhub.workerType>Micro</cloudhub.workerType>
+		<cloudhub.numberOfWorkers>1</cloudhub.numberOfWorkers>
+		
     </properties>
 
 	<build>
@@ -28,13 +41,16 @@
 				<configuration>
 					<cloudHubDeployment>
 					    <uri>${anypoint.uri}</uri>
-					    <muleVersion>${mule.version}</muleVersion>
+						<muleVersion>${mule.version}</muleVersion>
 					    <applicationName>${cloudhub.application.name}</applicationName>
 						<username>${cloudhub.username}</username>
 						<password>${cloudhub.password}</password>
 					    <environment>${anypoint.environment}</environment>
 					    <workerType>Micro</workerType>
                       	<workers>1</workers>
+						<!-- region>${cloudhub.region}</region -->
+						<!-- artifact>Absolute file location of the JAR to be deployed.</artifact -->
+						<!-- deploymentTimeout>${cloudhub.deploymentTimeout}</deploymentTimeout -->
 					    <properties>
                              <env>${env}</env>
                          </properties>
@@ -131,3 +147,9 @@
     </pluginRepositories>
 
 </project>
+
+<!-- 
+deploy - mvn clean package deploy -DmuleDeploy -DskipTests -Dmule.version=4.1.5 -Danypoint.environment=Sandbox -Danypoint.username= -Danypoint.password= -Dcloudhub.application.name=harshu-tempapi -Dmule.artifact=./target/temperatureapi-1.0.0-mule-application.jar
+
+undeploy - mvn mule:undeploy -Dmule.version=4.1.5  -Danypoint.environment=Sandbox -Danypoint.username= -Danypoint.password= -Dcloudhub.application.name=harshu-tempapi -Dmule.artifact=./target/temperatureapi-1.0.0-mule-application.jar
+-->
