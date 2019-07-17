@@ -20,14 +20,14 @@ phases:
     commands:
       - echo "Setup Elasic file system(mounting)... "
       - mkdir -p $EFS_DIR
-      - apt-get update && apt-get install -y nfs-common
+      - apt-get update && apt-get install -y nfs-common nfs-utils
     finally:
       - echo "End of install phase."
   pre_build:
     run-as: root
     commands:
       - echo "Mounting efs with ntfs v4.1"
-      - mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 $EFS_DNS:/ $EFS_DIR
+      - mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport $EFS_DNS:/ $EFS_DIR
       - df -h
       - mkdir -p $EFS_DIR/$M3_HOME/
       - echo " ================================= "
