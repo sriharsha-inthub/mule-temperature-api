@@ -31,8 +31,6 @@ phases:
     commands:
       - echo "Mounting efs with ntfs v4.1"
       - df -h
-      - cd $EFS_DIR
-      - ls -la
       - echo "mount -t efs $EFS_DNS:/ $EFS_DIR"
       - echo "$EFS_DNS_FULL:/ $EFS_DIR nfs4 nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0" >> /etc/fstab
       - cat /etc/fstab
