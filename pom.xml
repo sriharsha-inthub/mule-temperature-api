@@ -16,15 +16,18 @@
 		<mule.version>4.1.5</mule.version>
 		<mule.maven.plugin.version>3.3.0</mule.maven.plugin.version>
 		<munit.version>2.1.4</munit.version>
-		
-		<!-- anypoint.uri>https://anypoint.mulesoft.com</anypoint.uri -->
-		<!-- cloudhub.accessToken>${env.ACCESS_TOKEN}</cloudhub.accessToken -->
-		<!-- cloudhub.region> The default value is us-east-1/us-east2,(N. Virginia/Ohio)</cloudhub.region -->
-		<!-- anypoint.environment>Sandbox</anypoint.environment -->
-		<!-- cloudhub.businessGroupName>test</cloudhub.businessGroupName -->
-		<!-- cloudhub.username>dummyUser</cloudhub.username -->
-		<!--cloudhub.password>dummySecret</cloudhub.password -->
-		<!-- cloudhub.deploymentTimeout>1000000</cloudhub.deploymentTimeout --> <!-- 1000 seconds-->
+
+		<!-- 
+		<anypoint.uri>https://anypoint.mulesoft.com</anypoint.uri>
+		<cloudhub.accessToken>${env.ACCESS_TOKEN}</cloudhub.accessToken>
+		<cloudhub.region> The default value is us-east-1/us-east2,(N. Virginia/Ohio)</cloudhub.region>
+		<anypoint.environment>Sandbox</anypoint.environment>
+		<cloudhub.businessGroupName>test</cloudhub.businessGroupName>
+		<cloudhub.username>dummyUser</cloudhub.username>
+		<cloudhub.password>dummySecret</cloudhub.password>
+		<cloudhub.deploymentTimeout>1000000 => 1000 seconds</cloudhub.deploymentTimeout> 
+		-->
+
 		<cloudhub.application.name>${project.name}</cloudhub.application.name>
 		<cloudhub.workerType>Micro</cloudhub.workerType>
 		<cloudhub.numberOfWorkers>1</cloudhub.numberOfWorkers>
@@ -48,9 +51,11 @@
 					    <environment>${anypoint.environment}</environment>
 					    <workerType>Micro</workerType>
                       	<workers>1</workers>
-						<!-- region>${cloudhub.region}</region -->
-						<!-- artifact>Absolute file location of the JAR to be deployed.</artifact -->
-						<!-- deploymentTimeout>${cloudhub.deploymentTimeout}</deploymentTimeout -->
+						<!--
+						<region>${cloudhub.region}</region>
+						<artifact>Absolute file location of the JAR to be deployed.</artifact>
+						<deploymentTimeout>${cloudhub.deploymentTimeout}</deploymentTimeout>
+						-->
 					    <properties>
                              <env>${env}</env>
                          </properties>
