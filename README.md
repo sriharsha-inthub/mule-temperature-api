@@ -1,6 +1,6 @@
 "# mule-temperature-api" 
 
-> Build using AWS Codebuild
+> Build using AWS Developer tools
 
 ---
 
