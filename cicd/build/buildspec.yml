@@ -35,7 +35,6 @@ phases:
       - mount -a -t efs defaults
       - echo "****************************************************************************************************************"
       - mount -t nfs4 -o vers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport $EFS_DNS_FULL:/ $EFS_DIR
-      - df -H
       - mkdir -p $EFS_DIR/$MAVEN_HOME/
       - echo " ================================= "
       - echo "Mule app - temperature-api - Build Initiated... "
