@@ -60,7 +60,8 @@
                              <env>${env}</env>
                          </properties>
 					</cloudHubDeployment>
-				</configuration>
+				<classifier>mule-application</classifier>
+                </configuration>
 			</plugin>
 		<plugin>
                 <groupId>com.mulesoft.munit.tools</groupId>
@@ -151,9 +152,7 @@
         </pluginRepository>
     </pluginRepositories>
 
-</project>
-
-<!-- 
+</project><!-- 
 deploy - mvn clean package deploy -DmuleDeploy -DskipTests -Dmule.version=4.1.5 -Danypoint.environment=Sandbox -Danypoint.username= -Danypoint.password= -Dcloudhub.application.name=harshu-tempapi -Dmule.artifact=./target/temperatureapi-1.0.0-mule-application.jar
 
 undeploy - mvn mule:undeploy -Dmule.version=4.1.5  -Danypoint.environment=Sandbox -Danypoint.username= -Danypoint.password= -Dcloudhub.application.name=harshu-tempapi -Dmule.artifact=./target/temperatureapi-1.0.0-mule-application.jar

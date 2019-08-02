@@ -1,0 +1,80 @@
+version: 0.2
+
+env:
+  variables:
+    EFS_DIR: "/efs"
+    MAVEN_HOME: ".m2"
+    EFS_DNS_FULL: "efs.ap-southeast-2.amazonaws.com"
+    JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
+    APP_NAME: "tempapi-v1"
+    MULE_VERSION: "4.1.5"
+    CLOUDHUB_ENV: "Sandbox"
+    ANYPOINT_LOGIN_URI: "https://anypoint.mulesoft.com/accounts/login"
+  parameter-store:
+    CLOUDHUB_USERNAME: /CodeBuild/cloudhub_username
+    CLOUDHUB_PASSWORD: /CodeBuild/cloudhub_password
+    EFS_ID: /CodeBuild/efs_id
+phases:
+  install:
+    run-as: root
+    runtime-versions:
+      java: openjdk8
+    commands:
+      - echo "****************************************************************************************************************"
+      - echo "Setup Elasic file system(mounting)... "
+      - mkdir -p $EFS_DIR
+      - apt-get update && apt-get install -y nfs-common jq
+    finally:
+      - echo "End of install phase."
+  pre_build:
+    run-as: root
+    commands:
+      - echo "****************************************************************************************************************"
+      - echo "Mounting efs with nfsv4"
+      - df -h
+      - mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport $EFS_ID.$EFS_DNS_FULL:/ $EFS_DIR && ls $EFS_DIR
+      - df -h
+      - mkdir -p $EFS_DIR/$MAVEN_HOME/
+      - echo " ============================================================================================================== "
+      - echo "Mule app - httpecho - Build Initiated... "
+      - echo "Build [pre_build] phase started..."
+      - echo "Build [pre_build] phase completed..."
+      
+    finally:
+      - echo "End of pre-build phase."
+  build:
+    run-as: root
+    commands:
+      - echo "****************************************************************************************************************"
+      - echo "Build [build] phase started..."
+      - mvn clean install -DskipTests -Dgpg.skip=true -Dmaven.repo.local=$EFS_DIR/$MAVEN_HOME/
+      - echo "Build [build] phase completed..."
+    finally:
+      - echo "End of build phase."
+  post_build:
+    run-as: root
+    commands:
+      - echo "****************************************************************************************************************"
+      - echo "Build [post_build] phase started..."
+      - #echo "Deploying to CloudHub with credentials stored in parameter store"
+      - export CLOUDHUB_ACCESS_TOKEN=$(curl -d "username=$CLOUDHUB_USERNAME&password=$CLOUDHUB_PASSWORD" "$ANYPOINT_LOGIN_URI" | jq ".access_token")
+      - echo $CLOUDHUB_ACCESS_TOKEN
+      - #mvn deploy -DmuleDeploy -DskipTests -Dmule.version=$MULE_VERSION -Danypoint.environment=$CLOUDHUB_ENV -Danypoint.authToken=$CLOUDHUB_ACCESS_TOKEN -Dcloudhub.application.name=$APP_NAME -Dgpg.skip=true -Dmaven.repo.local=$EFS_DIR/$MAVEN_HOME/
+      - #mvn deploy -DmuleDeploy -DskipTests -Dmule.version=$MULE_VERSION -Danypoint.environment=$CLOUDHUB_ENV -Danypoint.username=$CLOUDHUB_USERNAME -Dcloudhub.password=$CLOUDHUB_PASSWORD -Dcloudhub.application.name=$APP_NAME -Dgpg.skip=true -Dmaven.repo.local=$EFS_DIR/$MAVEN_HOME/
+      - echo "Deploying to CloudHub with credentials stored in parameter store"
+      - #export CLOUDHUB_ACCESS_TOKEN=$(curl -d "username=$CLOUDHUB_USERNAME&password=$CLOUDHUB_PASSWORD" "$ANYPOINT_LOGIN_URI" | jq ".access_token")
+      - #echo $CLOUDHUB_ACCESS_TOKEN
+      - #mvn deploy -DmuleDeploy -DskipTests -Dmule.version=$MULE_VERSION -Danypoint.environment=$CLOUDHUB_ENV -Danypoint.authToken=$CLOUDHUB_ACCESS_TOKEN -Dcloudhub.application.name=$APP_NAME -Dgpg.skip=true -Dmaven.repo.local=$EFS_DIR/$MAVEN_HOME/
+      - mvn deploy -DmuleDeploy -DskipTests -Dmule.version=$MULE_VERSION -Danypoint.environment=$CLOUDHUB_ENV -Danypoint.username=$CLOUDHUB_USERNAME -Dcloudhub.password=$CLOUDHUB_PASSWORD -Dcloudhub.application.name=$APP_NAME -Dgpg.skip=true -Dmaven.repo.local=$EFS_DIR/$MAVEN_HOME/
+      - echo "Build [post_build] phase completed..."
+      - echo "****************************************************************************************************************"
+    finally:
+      - umount $EFS_DIR -f
+      - echo "End of post-build phase."  
+      - echo "To undeploy artifact from cloudhub"
+      - echo "mvn mule:undeploy -Dmule.version=$MULE_VERSION -Danypoint.environment=$CLOUDHUB_ENV -Danypoint.username=$CLOUDHUB_USERNAME -Dcloudhub.password=$CLOUDHUB_PASSWORD -Dcloudhub.application.name=$APP_NAME -Dmule.artifact=./target/httpecho-1.0.0-mule-application.jar"
+      
+artifacts:
+  files:
+    - target/tempapi-1.0.0-mule-application.jar
+  discard-paths: yes
