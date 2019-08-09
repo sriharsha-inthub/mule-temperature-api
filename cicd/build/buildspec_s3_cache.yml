@@ -23,7 +23,7 @@ phases:
     commands:
       - echo "****************************************************************************************************************"
       - echo "Build [build] phase started..."
-      - mvn clean install -DskipTests
+      - ###mvn clean install -DskipTests
       - echo "Build [build] phase completed..."
   post_build:
     run-as: root
