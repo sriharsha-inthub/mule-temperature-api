@@ -1,5 +1,3 @@
-
-
 > Build using AWS Developer tools
 
 ---
