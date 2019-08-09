@@ -1,0 +1,50 @@
+version: 0.2
+
+env:
+  variables:
+    JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
+    APP_NAME: "tempapi-v1"
+    MULE_VERSION: "4.1.5"
+    CLOUDHUB_ENV: "Sandbox"
+    ANYPOINT_LOGIN_URI: "https://anypoint.mulesoft.com/accounts/login"
+    CLOUDHUB_USERNAME: "harshu-1982"
+    CLOUDHUB_PASSWORD: "1Lovelavitr@"
+phases:
+  install:
+    run-as: root
+    runtime-versions:
+      java: openjdk8
+    commands:
+  pre_build:
+    run-as: root
+    commands:
+  build:
+    run-as: root
+    commands:
+      - echo "****************************************************************************************************************"
+      - echo "Build [build] phase started..."
+      - mvn clean install -DskipTests
+      - echo "Build [build] phase completed..."
+  post_build:
+    run-as: root
+    commands:
+      - echo "****************************************************************************************************************"
+      - echo "Build [post_build] phase started..."
+      - echo "Deploying to CloudHub with credentials stored in parameter store"
+      - #mvn deploy -DmuleDeploy -DskipTests -Dmule.version=$MULE_VERSION -Danypoint.environment=$CLOUDHUB_ENV -Danypoint.authToken=$CLOUDHUB_ACCESS_TOKEN -Dcloudhub.application.name=$APP_NAME -Dgpg.skip=true -Dmaven.repo.local=$EFS_DIR/$MAVEN_HOME/
+      - mvn deploy -DmuleDeploy -DskipTests -Dmule.version=$MULE_VERSION -Danypoint.environment=$CLOUDHUB_ENV -Danypoint.username=$CLOUDHUB_USERNAME -Dcloudhub.password=$CLOUDHUB_PASSWORD -Dcloudhub.application.name=$APP_NAME
+      - echo "Build [post_build] phase completed..."
+      - echo "****************************************************************************************************************"
+    finally:
+      - echo "End of post-build phase."  
+      - echo "To undeploy artifact from cloudhub"
+      - echo "mvn mule:undeploy -Dmule.version=$MULE_VERSION -Danypoint.environment=$CLOUDHUB_ENV -Danypoint.username=$CLOUDHUB_USERNAME -Dcloudhub.password=$CLOUDHUB_PASSWORD -Dcloudhub.application.name=$APP_NAME -Dmule.artifact=./target/temperatureapi-1.0.0-mule-application.jar"
+      
+artifacts:
+  files:
+    - target/temperatureapi-1.0.0-mule-application.jar
+  discard-paths: yes
+
+cache:
+  paths:
+    - '/root/.m2/**/*'
