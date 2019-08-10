@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ | This is the configuration file for Maven. It can be specified at two levels:
+ |
+ |  1. User Level. ${user.home}/.m2/settings.xml.
+ |  2. Global Level. ${maven.conf}/settings.xml.
+ |-->
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <localRepository>/root/.m2/repository</localRepository>
+
+  <servers>
+	<server>
+      <id>anypoint.serviceaccount.1</id>
+      <username>mulesoft201908-1</username>
+      <password>Encrypted password for anypoint trial account will expire on 2019-09-09 {lkIpq0szD3EHL+za0b1j/DAgrj0ULrgfjqWQA97liPc=}</password>
+    </server>
+	
+	 <server>
+      <id>anypoint.serviceaccount.2</id>
+      <username>mulesoft201908-2</username>
+      <password>Encrypted password for anypoint trial account will expire on 2019-09-09 {clkZ5rZCdewHLpRtnXWME3bWA/Vk6uAPYxqJc/A+2ng=}</password>
+    </server>
+	
+	 <server>
+      <id>anypoint.serviceaccount.3</id>
+      <username>mulesoft201908-3</username>
+      <password>Encrypted password for anypoint trial account will expire on 2019-09-09 {JxKPOt9Dv/EHpnl3CSANoIMgguoz/ePfAMGzrIxiJ08=}</password>
+    </server>
+    <!-- Another sample, using keys to authenticate.
+    <server>
+      <id>siteServer</id>
+      <privateKey>/path/to/private/key</privateKey>
+      <passphrase>optional; leave empty if not used.</passphrase>
+    </server>
+    -->
+  </servers>
+
+</settings>
