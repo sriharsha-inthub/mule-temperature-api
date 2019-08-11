@@ -17,7 +17,7 @@ phases:
     run-as: root
     commands: 
       - ls -lrt
-      - cp -r m2 /root/.m2
+      - cp -r m2/* /root/.m2
       - ls -lrt /root/.m2/
       - aws s3 cp s3://setupcicd-usingterraform-incodebuild/settings-security.xml settings-security.xml
       - ls -lrt
