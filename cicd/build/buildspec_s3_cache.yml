@@ -16,28 +16,23 @@ phases:
   pre_build:
     run-as: root
     commands: 
-      - ls -lrt
       - cp -r m2/* /root/.m2
-      - ls -lrt /root/.m2/
       - aws s3 cp s3://setupcicd-usingterraform-incodebuild/settings-security.xml settings-security.xml
-      - ls -lrt
-      - cat /root/.m2/settings.xml
-      - cat /root/.m2/settings-security.xml
-      - cat settings-security.xml
   build:
     run-as: root
     commands:
       - echo "****************************************************************************************************************"
-      - echo "Build [build] phase started..."
-      - #mvn clean package -DskipTests
-      - echo "Build [build] phase completed..."
+      - echo "BUILD [Package & Deploy] started..."
+      - mvn clean install deploy -DmuleDeploy -DskipTests -Dmule.version=$MULE_VERSION -Dcloudhub.application.name=$APP_NAME
+      - echo "BUILD [package & deploy] phase completed..."
   post_build:
     run-as: root
     commands:
       - echo "****************************************************************************************************************"
-      - echo "Build [post_build] phase started..."
-      - mvn clean install deploy -DmuleDeploy -DskipTests -Dmule.version=$MULE_VERSION -Dcloudhub.application.name=$APP_NAME
-      - echo "Build [post_build] phase completed..."
+      - echo "POST_BUILD [Unit Testing] phase started... "
+      - curl -X GET -H "Content-Type: application/json" -H "client_id: someid" -H "client_secret: somesecret" http://inthub-dev-tempapiv1.us-e2.cloudhub.io/api/?city=Brisbane,AU 
+      - curl -X GET -H "Content-Type: application/json" -H "client_id: someid" -H "client_secret: somesecret" http://inthub-dev-tempapiv1.us-e2.cloudhub.io/api/?city=Chennai,IN
+      - echo "POST_BUILD [Unit Testing] phase completed..."
       - echo "****************************************************************************************************************"
     finally:
       - echo "End of post-build phase."  
