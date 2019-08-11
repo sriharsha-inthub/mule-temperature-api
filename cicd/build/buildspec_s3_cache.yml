@@ -38,7 +38,7 @@ phases:
       - echo "End of post-build phase."  
       - echo "To undeploy artifact from cloudhub"
       - echo "mvn mule:undeploy -Dcloudhub.application.name=$APP_NAME -Dmule.artifact=./target/temperatureapi-1.0.0-mule-application.jar"
-      
+
 artifacts:
   files:
     - target/temperatureapi-1.0.0-mule-application.jar
