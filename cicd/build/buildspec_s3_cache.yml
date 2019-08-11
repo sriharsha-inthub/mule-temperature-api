@@ -30,8 +30,8 @@ phases:
     commands:
       - echo "****************************************************************************************************************"
       - echo "POST_BUILD [Unit Testing] phase started... "
-      - curl -X GET -H "Content-Type: application/json" -H "client_id: someid" -H "client_secret: somesecret" http://inthub-dev-tempapiv1.us-e2.cloudhub.io/api/?city=Brisbane,AU 
-      - curl -X GET -H "Content-Type: application/json" -H "client_id: someid" -H "client_secret: somesecret" http://inthub-dev-tempapiv1.us-e2.cloudhub.io/api/?city=Chennai,IN
+      - #curl -X GET -H "Content-Type: application/json" -H "client_id: someid" -H "client_secret: somesecret" http://inthub-dev-tempapiv1.us-e2.cloudhub.io/api/?city=Brisbane,AU 
+      - #curl -X GET -H "Content-Type: application/json" -H "client_id: someid" -H "client_secret: somesecret" http://inthub-dev-tempapiv1.us-e2.cloudhub.io/api/?city=Chennai,IN
       - echo "POST_BUILD [Unit Testing] phase completed..."
       - echo "****************************************************************************************************************"
     finally:
