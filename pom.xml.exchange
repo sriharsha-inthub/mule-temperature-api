@@ -2,16 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>dev.inthub</groupId>
+	<groupId>${cloudhub.organization_id}</groupId>
 	<artifactId>temperatureapi</artifactId>
 	<version>1.0.0</version>
 	<packaging>mule-application</packaging>
-	<name>inthub-dev-tempapiv1</name>
+	<name>inthub-dev.tempapiv1</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
+		<cloudhub.organization_id>e32d586e-3ee5-4f5b-a37c-afd008e7cf55</cloudhub.organization_id>
 		<app.runtime>4.1.5</app.runtime>
 		<mule.version>4.1.5</mule.version>
 		<mule.maven.plugin.version>3.3.0</mule.maven.plugin.version>
@@ -42,27 +42,6 @@
 				<artifactId>mule-maven-plugin</artifactId>
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
-				<configuration>
-					<cloudHubDeployment>
-						<uri>${anypoint.uri}</uri>
-						<muleVersion>${mule.version}</muleVersion>
-						<applicationName>${cloudhub.application.name}</applicationName>
-						<server>${anypoint.serviceaccount}</server>
-						<environment>${anypoint.environment}</environment>
-						<workerType>Micro</workerType>
-						<workers>1</workers>
-						<skipDeploymentVerification>false</skipDeploymentVerification>
-						<!--
-						<region>${cloudhub.region}</region>
-						<artifact>Absolute file location of the JAR to be deployed.</artifact>
-						<deploymentTimeout>${cloudhub.deploymentTimeout}</deploymentTimeout>
-						-->
-						<properties>
-							<env>${env}</env>
-						</properties>
-					</cloudHubDeployment>
-					<classifier>mule-application</classifier>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>com.mulesoft.munit.tools</groupId>
@@ -141,6 +120,12 @@
 			<url>https://repository.mulesoft.org/releases/</url>
 			<layout>default</layout>
 		</repository>
+		<repository>
+			<id>MyRepository</id>
+			<name>Inthub.dev Releases Repository</name>
+			<url>https://anypoint.mulesoft.com/exchange/api/v1/assets/e32d586e-3ee5-4f5b-a37c-afd008e7cf55/maven</url>
+			<layout>default</layout>
+		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -157,7 +142,16 @@
 			<url>https://repository.mulesoft.org/nexus/content/repositories/releases</url>
 		</pluginRepository>
 	</pluginRepositories>
-
+	
+	<distributionManagement>
+		<repository>
+			<id>Repository</id>
+			<name>Corporate Repository</name>
+			<url>https://maven.anypoint.mulesoft.com/api/v1/organizations/e32d586e-3ee5-4f5b-a37c-afd008e7cf55/maven</url>
+			<layout>default</layout>
+		</repository>
+	</distributionManagement>
+	
 </project>
 <!-- 
 deploy - mvn clean package deploy -DmuleDeploy -DskipTests -Dmule.version=4.1.5 -Danypoint.environment=Sandbox -Danypoint.username= -Danypoint.password= -Dcloudhub.application.name=harshu-tempapi -Dmule.artifact=./target/temperatureapi-1.0.0-mule-application.jar
