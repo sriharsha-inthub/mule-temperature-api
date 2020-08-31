@@ -11,10 +11,10 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-		<app.runtime>4.1.5</app.runtime>
-		<mule.version>4.1.5</mule.version>
-		<mule.maven.plugin.version>3.3.0</mule.maven.plugin.version>
+		
+		<mule.version>4.3.0</mule.version>
+		<app.runtime>4.3.0</app.runtime>
+		<mule.maven.plugin.version>3.3.5</mule.maven.plugin.version>
 		<munit.version>2.1.4</munit.version>
 		<anypoint.environment>Sandbox</anypoint.environment>
 		<anypoint.uri>https://anypoint.mulesoft.com</anypoint.uri>
@@ -48,7 +48,12 @@
 						<muleVersion>${mule.version}</muleVersion>
 						<applicationName>${cloudhub.application.name}</applicationName>
 						<server>${anypoint.serviceaccount}</server>
-						<environment>${anypoint.environment}</environment>
+						<environment>Sandbox</environment>
+						<businessGroup>logger</businessGroup>
+						<objectStoreV2>true</objectStoreV2>
+						<!--<server>anypoint.server.cle-1</server>-->
+						<username>inthub-dev1</username>
+						<password>Test@1234</password>
 						<workerType>Micro</workerType>
 						<workers>1</workers>
 						<skipDeploymentVerification>false</skipDeploymentVerification>
@@ -58,7 +63,8 @@
 						<deploymentTimeout>${cloudhub.deploymentTimeout}</deploymentTimeout>
 						-->
 						<properties>
-							<env>${env}</env>
+							<env>test</env>
+							<http.port>8081</http.port>
 						</properties>
 					</cloudHubDeployment>
 					<classifier>mule-application</classifier>
